@@ -1,19 +1,47 @@
-// este un archivo de implementacion de la clase State
-
 #include "State.h"
+#include <cmath>
+#include <algorithm>
 
-// Constructor de la clase State
-State::State(int a0, int a1, State *parent, string operation) {
-    this->a0 = a0;
-    this->a1 = a1;
+State::State(int* bidones, int num_bidones, State* parent, const std::string& action) {
+    this->bidones = new int[num_bidones];
+    this->num_bidones = num_bidones;
     this->parent = parent;
-    this->operation = operation;
+    this->action = action;
+    for (int i = 0; i < num_bidones; ++i) {
+        this->bidones[i] = bidones[i];
+    }
+    this->h = 0;
 }
 
-// Metodo que imprime el estado y toda la secuencia de operaciones que lo generaron
+State::~State() {
+    delete[] bidones;
+}
+
 void State::print() {
-    if (parent != nullptr) {
-        parent->print();
+    for (int i = 0; i < num_bidones; ++i) {
+        std::cout << bidones[i] << " ";
     }
-    cout << "a0: " << a0 << " a1: " << a1 << " parent: "<< parent << " operation: " << operation << endl;
+    std::cout << " (" << action << ")" << std::endl;
+}
+
+bool State::isGoal(int* goal) {
+    for (int i = 0; i < num_bidones; ++i) {
+        if (bidones[i] != goal[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+int State::calculateHeuristic(int* goal) {
+    h = calculateManhattanDistance(goal);
+    return h;
+}
+
+int State::calculateManhattanDistance(int* goal) {
+    int distance = 0;
+    for (int i = 0; i < num_bidones; ++i) {
+        distance += std::abs(bidones[i] - goal[i]);
+    }
+    return distance;
 }

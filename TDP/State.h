@@ -1,16 +1,28 @@
-// se incluyen todas las librerias necesarias
+#ifndef STATE_H
+#define STATE_H
+
 #include <iostream>
 #include <string>
+#include <cmath>
 
 using namespace std;
 
-// Se define el estado para el problema de los bidones
 class State {
-    public:
-    int a0;
-    int a1;
-    State *parent;
-    string operation;
-    State(int a0, int a1, State *parent, string operation);
-    void print(); // imprime el estado y toda la secuencia de operaciones que lo generaron
+public:
+    State(int* bidones, int num_bidones, State* parent, const std::string& action);
+    ~State();
+    void print();
+    bool isGoal(int* goal);
+    int calculateHeuristic(int* goal);
+
+    int* bidones;
+    int num_bidones;
+    State* parent;
+    std::string action;
+    int h; // Heurística
+
+private:
+    int calculateManhattanDistance(int* goal);
 };
+
+#endif // STATE_H
