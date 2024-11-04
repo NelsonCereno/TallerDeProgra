@@ -29,6 +29,12 @@ private:
     State* fillBidon(State* current, int i);
     State* emptyBidon(State* current, int i);
     State* transferBidon(State* current, int i, int j);
+
+    // Método para ordenar los sucesores por heurística
+    void sortSuccessors(State** successors, int num_successors);
+
+    // Método para encontrar el mínimo de dos enteros
+    int min(int a, int b);
 };
 
 #endif // JUG_H

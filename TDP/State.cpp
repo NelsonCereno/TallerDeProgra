@@ -1,6 +1,5 @@
 #include "State.h"
 #include <cmath>
-#include <algorithm>
 
 // Constructor que inicializa el estado con los bidones, el número de bidones, el estado padre y la acción realizada
 State::State(int* bidones, int num_bidones, State* parent, const std::string& action) {

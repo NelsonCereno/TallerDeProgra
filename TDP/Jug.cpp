@@ -44,9 +44,7 @@ State* Jug::solve() {
         State** successors = getSuccessors(current, num_successors); // Obtiene los sucesores del estado actual
 
         // Ordena los sucesores por heurística antes de insertarlos en la tabla hash de estados abiertos
-        std::sort(successors, successors + num_successors, [this](State* a, State* b) {
-            return a->calculateHeuristic(goal) < b->calculateHeuristic(goal);
-        });
+        sortSuccessors(successors, num_successors);
 
         for (int i = 0; i < num_successors; ++i) {
             State* successor = successors[i];
@@ -116,10 +114,28 @@ State* Jug::transferBidon(State* current, int i, int j) {
     for (int k = 0; k < num_bidones; ++k) {
         new_bidones[k] = current->bidones[k]; // Copia los valores de los bidones actuales
     }
-    int transfer_amount = std::min(current->bidones[i], capacities[j] - current->bidones[j]); // Calcula la cantidad de agua a transferir
+    int transfer_amount = min(current->bidones[i], capacities[j] - current->bidones[j]); // Calcula la cantidad de agua a transferir
     new_bidones[i] -= transfer_amount; // Resta la cantidad transferida del bidón i
     new_bidones[j] += transfer_amount; // Suma la cantidad transferida al bidón j
     State* newState = new State(new_bidones, num_bidones, current, "transfer " + std::to_string(i) + " to " + std::to_string(j)); // Crea un nuevo estado con la acción "transfer i to j"
     delete[] new_bidones; // Libera la memoria de los bidones nuevos
     return newState; // Retorna el nuevo estado
+}
+
+// Método para ordenar los sucesores por heurística
+void Jug::sortSuccessors(State** successors, int num_successors) {
+    for (int i = 0; i < num_successors - 1; ++i) {
+        for (int j = 0; j < num_successors - i - 1; ++j) {
+            if (successors[j]->calculateHeuristic(goal) > successors[j + 1]->calculateHeuristic(goal)) {
+                State* temp = successors[j];
+                successors[j] = successors[j + 1];
+                successors[j + 1] = temp;
+            }
+        }
+    }
+}
+
+// Método para encontrar el mínimo de dos enteros
+int Jug::min(int a, int b) {
+    return (a < b) ? a : b;
 }
