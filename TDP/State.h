@@ -34,6 +34,7 @@ public:
 private:
     // Método privado que calcula la distancia de Manhattan entre el estado actual y el estado objetivo
     int calculateManhattanDistance(int* goal);
+    int calculateBrayCurtisDistance(int* goal); // Nueva declaración
 };
 
 #endif // STATE_H

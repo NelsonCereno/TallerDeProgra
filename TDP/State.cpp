@@ -38,7 +38,7 @@ bool State::isGoal(int* goal) {
 
 // Método que calcula la heurística del estado actual en función del estado objetivo
 int State::calculateHeuristic(int* goal) {
-    h = calculateManhattanDistance(goal); // Calcula la distancia de Manhattan y la asigna a h
+    h = calculateBrayCurtisDistance(goal); // Cambiado a Bray-Curtis
     return h; // Retorna el valor de la heurística
 }
 
@@ -49,4 +49,14 @@ int State::calculateManhattanDistance(int* goal) {
         distance += std::abs(bidones[i] - goal[i]); // Suma la diferencia absoluta entre cada bidón y el estado objetivo
     }
     return distance; // Retorna la distancia de Manhattan
+}
+
+int State::calculateBrayCurtisDistance(int* goal) {
+    int sum_diff = 0;
+    int sum_total = 0;
+    for (int i = 0; i < num_bidones; ++i) {
+        sum_diff += std::abs(bidones[i] - goal[i]);
+        sum_total += (bidones[i] + goal[i]);
+    }
+    return sum_total == 0 ? 0 : (sum_diff / sum_total);
 }
